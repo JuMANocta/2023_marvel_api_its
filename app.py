@@ -1,7 +1,7 @@
 import hashlib # Importer la librairie hashlib pour générer un hash
 import time # Importer la librairie time pour générer un timestamp
 import requests # Importer la librairie requests pour faire des requêtes HTTP
-from flask import Flask, jsonify, render_template # Importer la librairie Flask pour créer une API et jsonify pour retourner du JSON
+from flask import Flask, jsonify, redirect, render_template # Importer la librairie Flask pour créer une API et jsonify pour retourner du JSON
 from flask_bootstrap import Bootstrap # Importer la librairie Flask-Bootstrap pour utiliser Bootstrap dans l'application
 from models.character import Character
 
@@ -61,7 +61,7 @@ def boot_charac(character_id): # Définir une fonction pour récupérer un perso
     return render_template('character.html', character=boot_character) # Retourner le template character.html avec le personnage boot_character
 
 # get_comics get_series get_stories get_events
-@app.route('/<string:resource>', methods=['GET'])
+@app.route('/resources/<string:resource>', methods=['GET'])
 def get_all(resource):
     ts_hash = generer_ts_hash()
     params = {
@@ -73,4 +73,13 @@ def get_all(resource):
     response = requests.get(f"{BASE_URL}{resource}", params=params)
     return jsonify(response.json())
 
-app.run(debug=True) # Lancer l'application en mode debug
+@app.errorhandler(500)
+def error_serveur(e):
+    return f"500 - Erreur serveur {e}", 500
+
+@app.errorhandler(404)
+def error_404(e):
+    app.logger.error(f"404 - Page non trouvée {e}")
+    return redirect('/characters')
+
+app.run(debug=False) # Lancer l'application en mode debug
