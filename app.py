@@ -3,6 +3,7 @@ import time # Importer la librairie time pour générer un timestamp
 import requests # Importer la librairie requests pour faire des requêtes HTTP
 from flask import Flask, jsonify, render_template # Importer la librairie Flask pour créer une API et jsonify pour retourner du JSON
 from flask_bootstrap import Bootstrap # Importer la librairie Flask-Bootstrap pour utiliser Bootstrap dans l'application
+from models.character import Character
 
 app = Flask(__name__) # Créer une instance de l'application Flask
 app.config.from_pyfile('config.py') # Charger la configuration depuis le fichier config.py
@@ -55,7 +56,8 @@ def boot_charac(character_id): # Définir une fonction pour récupérer un perso
         'hash': ts_hash['hash']
     }
     response = requests.get(f"{BASE_URL}characters/{character_id}", params=params) # Faire une requête HTTP GET sur l'URL de base + characters + l'identifiant du personnage
-    boot_character = response.json()['data']['results'][0] # Récupérer le personnage dans la réponse
+    character_data = response.json()['data']['results'][0] # Récupérer le personnage dans la réponse
+    boot_character = Character.from_dict(character_data) # Créer une instance de la classe Character avec le personnage
     return render_template('character.html', character=boot_character) # Retourner le template character.html avec le personnage boot_character
 
 app.run(debug=True) # Lancer l'application en mode debug
