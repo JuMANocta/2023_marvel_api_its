@@ -56,7 +56,6 @@ def boot_charac(character_id): # Définir une fonction pour récupérer un perso
     }
     response = requests.get(f"{BASE_URL}characters/{character_id}", params=params) # Faire une requête HTTP GET sur l'URL de base + characters + l'identifiant du personnage
     boot_character = response.json()['data']['results'][0] # Récupérer le personnage dans la réponse
-    print(boot_character)
     return render_template('character.html', character=boot_character) # Retourner le template character.html avec le personnage boot_character
 
 app.run(debug=True) # Lancer l'application en mode debug

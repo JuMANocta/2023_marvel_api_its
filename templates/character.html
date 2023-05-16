@@ -1,20 +1,29 @@
 <!-- template de base bootstrap -->
 {% extends "bootstrap/base.html" %}
-
+{% block html_attribs %}
+    lang='fr'
+{% endblock html_attribs %}
 {% block title %}
-{{ character.name }}
+    {{ character.name }}
 {% endblock title %}
-
 {% block content %}
-<div class="">
-    <div class="">
-        <div class="">
-            <img src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}" alt="{{ character.name }}" class="img-fluid">
-        </div>
-        <div class="">
-            <h1>{{ character.name }}</h1>
-            <p>{{ character.description }}</p>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}" alt="{{ character.name }}" class="img-fluid" width="" height="">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h1>{{ character.name }}</h1>
+                            <p>{{ character.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock content %}
