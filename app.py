@@ -60,4 +60,17 @@ def boot_charac(character_id): # Définir une fonction pour récupérer un perso
     boot_character = Character.from_dict(character_data) # Créer une instance de la classe Character avec le personnage
     return render_template('character.html', character=boot_character) # Retourner le template character.html avec le personnage boot_character
 
+# get_comics get_series get_stories get_events
+@app.route('/<string:resource>', methods=['GET'])
+def get_all(resource):
+    ts_hash = generer_ts_hash()
+    params = {
+        'apikey': PUBLIC_KEY,
+        'ts': ts_hash['ts'],
+        'hash': ts_hash['hash'],
+        'limit': 100
+    }
+    response = requests.get(f"{BASE_URL}{resource}", params=params)
+    return jsonify(response.json())
+
 app.run(debug=True) # Lancer l'application en mode debug
