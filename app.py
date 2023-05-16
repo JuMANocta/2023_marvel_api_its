@@ -10,22 +10,22 @@ PUBLIC_KEY = app.config['MARVEL_PUBLIC_KEY'] # Récupérer la clé publique depu
 PRIVATE_KEY = app.config['MARVEL_PRIVATE_KEY'] # Récupérer la clé privée depuis la configuration
 BASE_URL = app.config['BASE_URL'] # Récupérer l'URL de base depuis la configuration
 
-def generate_hash(ts, private_key, public_key):
-    m = hashlib.md5()
-    m.update(f"{ts}{private_key}{public_key}".encode('utf-8'))
-    return m.hexdigest()
+def generate_hash(ts, private_key, public_key): # Définir une fonction pour générer un hash
+    m = hashlib.md5() # Créer une instance de l'algorithme MD5
+    m.update(f"{ts}{private_key}{public_key}".encode('utf-8')) # Mettre à jour le hash avec le timestamp, la clé privée et la clé publique
+    return m.hexdigest() # Retourner le hash en hexadécimal
 
-@app.route('/characters')
-def get_characters():
-    ts = str(time.time())
-    hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY)
-    params = {
+@app.route('/characters') # création d'une route pour récupérer les personnages
+def get_characters(): # Définir une fonction pour récupérer les personnages
+    ts = str(time.time()) # Générer un timestamp
+    hash = generate_hash(ts, PRIVATE_KEY, PUBLIC_KEY) # Générer un hash avec le timestamp, la clé privée et la clé publique
+    params = { # Définir les paramètres de la requête
         'apikey': PUBLIC_KEY,
         'ts': ts,
         'hash': hash,
         'limit': 100
     }
-    response = requests.get(f"{BASE_URL}characters", params=params)
-    return jsonify(response.json())
+    response = requests.get(f"{BASE_URL}characters", params=params) # Faire une requête HTTP GET sur l'URL de base + characters
+    return jsonify(response.json()) # Retourner le JSON de la réponse
 
-app.run(debug=True)
+app.run(debug=True) # Lancer l'application en mode debug
