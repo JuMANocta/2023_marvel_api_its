@@ -1,14 +1,14 @@
-import hashlib
-import time
-import requests
-from flask import Flask, jsonify
+import hashlib # Importer la librairie hashlib pour générer un hash
+import time # Importer la librairie time pour générer un timestamp
+import requests # Importer la librairie requests pour faire des requêtes HTTP
+from flask import Flask, jsonify # Importer la librairie Flask pour créer une API et jsonify pour retourner du JSON
 
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app = Flask(__name__) # Créer une instance de l'application Flask
+app.config.from_pyfile('config.py') # Charger la configuration depuis le fichier config.py
 
-PUBLIC_KEY = app.config['MARVEL_PUBLIC_KEY']
-PRIVATE_KEY = app.config['MARVEL_PRIVATE_KEY']
-BASE_URL = 'http://gateway.marvel.com/v1/public/'
+PUBLIC_KEY = app.config['MARVEL_PUBLIC_KEY'] # Récupérer la clé publique depuis la configuration
+PRIVATE_KEY = app.config['MARVEL_PRIVATE_KEY'] # Récupérer la clé privée depuis la configuration
+BASE_URL = app.config['BASE_URL'] # Récupérer l'URL de base depuis la configuration
 
 def generate_hash(ts, private_key, public_key):
     m = hashlib.md5()
